@@ -1,0 +1,33 @@
+plugins {
+	id 'java-library'
+	id 'com.palantir.git-version' version '0.13.0'
+}
+
+archivesBaseName = 'mixin'
+version = gitVersion().split('-').getAt(0).replace('dirty', '')
+
+java {
+	sourceCompatibility = targetCompatibility = JavaVersion.VERSION_1_8
+	withSourcesJar()
+	withJavadocJar()
+}
+
+javadoc {
+	options {
+		links 'https://docs.zaaarf.foo/lillero'
+	}
+}
+
+repositories {
+	maven { url = 'https://maven.minecraftforge.net/' }
+	maven { url = 'https://maven.fantabos.co' }
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.apache.logging.log4j:log4j-api:2.17.1'
+	implementation 'org.apache.logging.log4j:log4j-core:2.17.1'
+	implementation 'org.ow2.asm:asm-commons:9.4'
+	implementation 'ftbsc:lll:0.5.0'
+	implementation 'org.spongepowered:mixin:0.8.3'
+}
