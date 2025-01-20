@@ -16,9 +16,9 @@ major API changes, with any other future mod loader that will try to force Mixin
 ```json
 {
   "required": true,
-  "package": "${fakeMixinPackage}",
+  "package": "ftbsc.lll.mixin.fake",
   "plugin": "ftbsc.lll.mixin.LilleroMixinPlugin",
-  "mixins": ["${fakeMixinClass}"]
+  "mixins": ["FakeMixin"]
 }
 ```
 
