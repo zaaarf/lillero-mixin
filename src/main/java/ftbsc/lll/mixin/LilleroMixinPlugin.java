@@ -15,13 +15,14 @@ import java.util.*;
 
 /**
  * Allows you to load your mod's Lillero patches as a Mixin plugin.
- * You must register this as a plugin in your mod's Mixin config; refer to
- * your mod loader's instructions for more details.
+ * You must extend this and register your child class as a plugin in your
+ * mod's Mixin config; refer to your mod loader's instructions for details.
  * For this to work, Mixin must know what the target classes are; you can do
  * so by creating an empty interface with a {@link Mixin} annotation listing
- * them; if it's available in your env, Lillero-processor can generate it.
+ * them; if it's available in your environment, Lillero-processor can generate
+ * it for you.
  */
-public class LilleroMixinPlugin implements IMixinConfigPlugin {
+public abstract class LilleroMixinPlugin implements IMixinConfigPlugin {
 	/**
 	 * The JVM arg key which specifies the logging level for this.
 	 */
@@ -35,15 +36,39 @@ public class LilleroMixinPlugin implements IMixinConfigPlugin {
 	/**
 	 * The logger that this loader uses.
 	 */
-	protected final Logger logger = Configurator.setLevel(
-		LogManager.getLogger(),
-		Level.toLevel(System.getProperty(LEVEL_KEY), Level.INFO)
-	);
+	protected final Logger logger;
+
+	/**
+	 * Constructor which takes a custom logger.
+	 * @param logger the logger to use for this
+	 */
+	protected LilleroMixinPlugin(Logger logger) {
+		this.logger = logger;
+	}
+
+	/**
+	 * Constructor which uses the default logger.
+	 */
+	protected LilleroMixinPlugin() {
+		this.logger = Configurator.setLevel(
+			LogManager.getLogger(this.getClass().getCanonicalName()),
+			Level.toLevel(System.getProperty(LEVEL_KEY), Level.INFO)
+		);
+	}
+
+	/**
+	 * Gets the Lillero injectors this is supposed to apply.
+	 * This may be overridden to add custom loading behaviour.
+	 * @return an iterable sequence of {@link IInjector}s.
+	 */
+	protected Iterable<IInjector> getInjectors() {
+		return ServiceLoader.load(IInjector.class, this.getClass().getClassLoader());
+	}
 
 	@Override
 	public void onLoad(String mixinPackage) {
 		int found = 0;
-		for(IInjector inj : ServiceLoader.load(IInjector.class, this.getClass().getClassLoader())) {
+		for(IInjector inj : this.getInjectors()) {
 			this.logger.debug("Found injector {}!", inj.getClass().getSimpleName());
 			this.injectorMap.computeIfAbsent(inj.targetClass(), k -> new ArrayList<>()).add(inj);
 			found++;
