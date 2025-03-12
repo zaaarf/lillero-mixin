@@ -29,11 +29,6 @@ public abstract class LilleroMixinPlugin implements IMixinConfigPlugin {
 	private static final String LEVEL_KEY = "lll.logging.level";
 
 	/**
-	 * Already applied injectors are stored here.
-	 */
-	private static final Set<Class<? extends IInjector>> ALREADY_FOUND = new HashSet<>();
-
-	/**
 	 * Maps each fully-qualified name to its associated class.
 	 */
 	protected final Map<String, List<IInjector>> injectorMap = new HashMap<>();
@@ -74,7 +69,7 @@ public abstract class LilleroMixinPlugin implements IMixinConfigPlugin {
 	public void onLoad(String mixinPackage) {
 		int found = 0;
 		for(IInjector inj : this.getInjectors()) {
-			if(!ALREADY_FOUND.add(inj.getClass())) {
+			if(!inj.getClass().getPackage().getName().equals(mixinPackage)) {
 				// stupid fixes for stupid problems
 				continue;
 			}
@@ -84,7 +79,7 @@ public abstract class LilleroMixinPlugin implements IMixinConfigPlugin {
 			found++;
 		}
 
-		this.logger.debug("Found {} injectors!", found);
+		this.logger.debug("Found {} injectors in plugin {}!", found, this.getClass().getCanonicalName());
 	}
 
 	@Override
