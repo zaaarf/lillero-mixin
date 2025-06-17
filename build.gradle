@@ -20,12 +20,12 @@ javadoc {
 
 repositories {
 	maven { url = 'https://maven.minecraftforge.net/' }
-	maven { url = 'https://maven.fantabos.co' }
+	maven { url = 'https://maven.zaaarf.foo' }
 	mavenCentral()
 }
 
 dependencies {
 	implementation 'org.ow2.asm:asm-commons:9.6'
-	implementation 'ftbsc:lll:0.5.1'
+	implementation 'ftbsc:lll:0.6.1'
 	implementation 'org.spongepowered:mixin:0.8.5'
 }
