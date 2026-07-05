@@ -17,10 +17,10 @@ major API changes, with any other future mod loader that will try to force Mixin
 
 ```json
 {
-  "required": true,
-  "package": "mymod.patches",
-  "plugin": "mymod.mixin.MyLilleroMixinPlugin",
-  "mixins": ["FakeMixin"]
+	"required": true,
+	"package": "mymod.patches",
+	"plugin": "mymod.mixin.MyLilleroMixinPlugin",
+	"mixins": ["FakeMixin"]
 }
 ```
 
