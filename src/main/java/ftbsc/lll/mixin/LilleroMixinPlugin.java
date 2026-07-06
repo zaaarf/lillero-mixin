@@ -153,10 +153,11 @@ public abstract class LilleroMixinPlugin implements IMixinConfigPlugin {
 
 				for(IInjector inj : notFound) {
 					this.logger.warn(
-						"Injector for method {}::{} with descriptor {} did not find a target!",
+						"Injector (reason: \"{}\") for method {}::{} with descriptor {} did not find a target!",
 						inj.targetClass(),
 						inj.methodName(),
-						inj.methodDesc()
+						inj.methodDesc(),
+						inj.reason()
 					);
 				}
 			} catch(Throwable t) {
